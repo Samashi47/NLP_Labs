@@ -14,7 +14,7 @@ We finally store these two `JSON` documents in a local MongoDB Database called `
 This section we'll discuss the choices made in the Arabic NLP piepline.
 ### 3.1 Tokenization
 Tokenization is fairly straightforward in Arabic, as it doesn't differ from other languages (e.g. English).\
-I chose to use a tokenizer from the `pyarabic` [1] library, there are two ways to tokenize your text, either by word tokens or sentence tokens, I tried both in the [notebook](https://github.com/Samashi47/NLP_Labs/blob/main/Lab1/lab1.ipynb) for comparison.\
+I chose to use a tokenizer from the `pyarabic` [[1]](#1) library, there are two ways to tokenize your text, either by word tokens or sentence tokens, I tried both in the [notebook](https://github.com/Samashi47/NLP_Labs/blob/main/Lab1/lab1.ipynb) for comparison.\
 We can take the following as an example:
 ```python
 word tokenization : ['ومقارنها', 'بالسنة', 'الماضية', '،']
@@ -41,7 +41,7 @@ Tokenized text without stopwords: ['افتتاحية', 'النشرة', 'الفص
 Sentence tokenized text with stopwords: 'في افتتاحية النشرة الفصلية الأولى ضمان الاستثمار لسنة 2024'
 Sentence tokenized text without stopwords: [' افتتاحية النشرة الفصلية الأولى ضمان الاستثمار لسنة 2024']
 ```
-### 3.4 Converting numbers to arabic words
+### 3.4 Converting numbers to Arabic words
 Converting numbers to Arabic words is an optional step in this pipeline as they are considered as stopwords. Due to this, I deleted them from the token list even though I had converted them from numbers to Arabic word numbers.\
 ```python
 number in token list : ['2023']
@@ -55,32 +55,32 @@ Original token list: ['العربية', 'مؤشري']
 Normalized token list: ['العربيه', 'مءشري']
 ```
 ## 4. Stemming
-Stemming is an important step, it provides the root of a word but can sometimes give words without meaning (e.g. stem of `وكاله` is `ال`), this problem persists even in Arabic NLP. I chose to use an Arabic stemmer from the `tashaphyne`[2] library.\
+Stemming is an important step, it provides the root of a word but can sometimes give words without meaning (e.g. stem of `وكاله` is `ال`), this problem persists even in Arabic NLP. I chose to use an Arabic stemmer from the `tashaphyne`[[2]](#2) library.\
 Here's an example of the output:
 ```python
 Origial token list: ['العربيه', 'مءشري', 'فيتش']
 Stemmed token list: ['عربيه', 'مءشر', 'تش']
 ```
 ## 5. Lemmatization
-Lemmatization is similar to stemming, but provides more meaningful words (e.g. lemma of `الشركات` is `شركة`) which may be useful in use cases where meaning is important. However lemmatizers are more computationally expensive than stemmers. I chose to use an Arabic lemmatizer from the `qalsadi`[3] library.\
+Lemmatization is similar to stemming but provides more meaningful words (e.g. lemma of `الشركات` is `شركة`) which may be useful in use cases where meaning is important. However, lemmatizers are more computationally expensive than stemmers. I chose to use an Arabic lemmatizer from the `qalsadi`[[3]](#3) library.\
 Here's an example of the output:
 ```python
 Origial token list: ['الشركات', 'متعدده', 'الجنسيات', 'ومءسسات']
 Lemmatized token list: ['شركة', 'متعدد', 'جنس', 'ومءسسات']
 ```
 ## 6. Stemming and lemmatization comparison
-As mentionned before, the key difference between Stemming and lemmatization is that lemmatizers provide more meaningful roots of words. However lemmatizers are computationally expensive, and we can see the difference even in our small use case (300-500 words/article). In addition, if we thoroughly search through the lemmatized token list, we can notice the difference in word meaning between stemming and lemmatization.
+As mentioned before, the key difference between Stemming and lemmatization is that lemmatizers provide more meaningful roots of words. However lemmatizers are computationally expensive, and we can see the difference even in our small use case (300-500 words/article). In addition, if we thoroughly search through the lemmatized token list, we can notice the difference in word meaning between stemming and lemmatization.
 ## 7. PoS Tagging
-PoS tagging is a process where we tag word are given a particular part of speech (adverb, adjective, verb, etc.). Research done in English PoS tagging is quite advanced compared to Arabic, Arabic is quite a complex language and little research was done in this field, however we'll try to provide two approaches to solve this problem.
+PoS tagging is a process where we tag words with their particular part of speech (adverb, adjective, verb, etc.). Research done in English PoS tagging is quite advanced compared to Arabic, Arabic is quite a complex language and little research was done in this field, however, we'll try to provide two approaches to solve this problem.
 ### 7.1 ML approach
-Creating a model for PoS tagging is quite a difficult a task to do, espacially with the lack of datasets to train the model, and the huge number of words in the Arabic language, which is why I sticked to using the `Farasa` [4] library. This is a `Java` package in origin, but it has a Python wrapper. We'll stick to using this tagger on the original text because it takes 30+ minutes to use on the token list and we can see that the library is fairly heavy from the way it calls the jars each time.\
+Creating a model for PoS tagging is quite a difficult a task to do, especially with the lack of datasets to train the model and the huge number of words in the Arabic language, which is why I sticked to using the `Farasa` [[4]](#4) library. This is a `Java` package in origin, but it has a Python wrapper. We'll stick to using this tagger on the original text because it takes 30+ minutes to use on the token list and we can see that the library is fairly heavy from the way it calls the jars each time.\
 The PoS tagger seems quite accurate, let's see an example of the output:
 ```python
 Tagged text: عن/PREP حلول/NOUN-FP ال+ مغرب/DET+NOUN-MS
 ```
 ### 7.2 RegEx approach
-The Arabic language is quite a complex language with a huge number of patterns for verbs, nouns, adjectives, etc..., with some words not necessarily having a patterns and others change meaning if tashkeel changes[5]. However I tried to develop a small regex PoS tagger from the rules provided by Mr. Hjouj [6], the tagger is simple, as it only has NOUN and VERB classes. the arabic letters had to be converted to their ascii to be implemented in the regex pattern matcher, to extract the *Awzan* and patterns. The Tagger was given the lemmatized token list because of the advantages that lemmatization provides.\
-In conclusion, after some evaluation the tagger seems to be not that accurate, however it does get some words correctly tagged, especially for th ones tha follow the patterns that it was supposed to handle.\
+The Arabic language is quite a complex language with a huge number of patterns for verbs, nouns, adjectives, etc..., with some words not necessarily having patterns and others changing meaning if tashkeel changes [[5]](#5). However I tried to develop a small regex PoS tagger from the rules provided by Mr. Hjouj [[6]](#6), the tagger is simple, as it only has NOUN and VERB classes. the Arabic letters had to be converted to their ascii to be implemented in the regex pattern matcher, to extract the *Awzan* and patterns. The Tagger was given the lemmatized token list because of the advantages that lemmatization provides.\
+In conclusion, after some evaluation the tagger seems to be not that accurate, however, it does get some words correctly tagged, especially for the ones that follow the patterns that it was supposed to handle.\
 Here's an example of the output:
 ```python
 Lemmatized token list: ['عالم', 'دول', 'العربيه', 'مءشري', 'فيتش']
@@ -88,17 +88,17 @@ Custom POS Tagged: ['NOUN', 'VERB', 'VERB', 'VERB', 'NOUN']
 ```
 ## 8. Named Entity Recognition
 We finally applied the NER Tagger by `Ferasa`, I should note that the `Ferasa NER Tagger` is quite heavy on the machine.
-However it seems to be accurate in detecting entities in the text.\
+However, it seems to be accurate in detecting entities in the text.\
 Here's an example of the output:
 ```python
 NER Tagged text: 'أعلنت/O المؤسسة/B-ORG العربية/I-ORG لضمان/I-ORG الاستثمار'
 ```
 ## 9. What I learned
-To conclude what I have learned during this Lab, is that Arabic is far more complex than its latin counterparts, tashkeel plays a huge role in determining the meaning of a word, also handling Arabic text seems to be quite tedious, in addition the lack of research done in the field of Arabic NLP, consequently, the libraries for Arabic NLP seem to be quite limited and small in number.
+To conclude what I have learned during this Lab, is that Arabic is far more complex than its Latin counterparts, tashkeel plays a huge role in determining the meaning of a word, also handling Arabic text seems to be quite tedious, in addition, the lack of research done in the field of Arabic NLP, consequently, the libraries for Arabic NLP seem to be quite limited and small in number.
 ## 10. References
-[1] Zerrouki, T., (2023). PyArabic: A Python package for Arabic text. Journal of Open Source Software, 8(84), 4886, https://doi.org/10.21105/joss.04886\
-[2] Alkhatib, R. M., Zerrouki, T., Shquier, M. M. A., & Balla, A. (2023). Tashaphyne0.4: A new arabic light stemmer based on rhyzome modeling approach. Information Retrieval Journa, 26(14). doi: https://doi.org/10.1007/s10791-023-09429-y\
-[3] T. Zerrouki, Qalsadi, Arabic mophological analyzer Library for python.,  https://pypi.python.org/pypi/qalsadi/\
-[4] MagedSaeed. (n.d.). GitHub - MagedSaeed/farasapy: A Python implementation of Farasa toolkit. GitHub. https://github.com/MagedSaeed/farasapy?tab=readme-ov-file#want-to-cite\
-[5] Sawalha, M., Atwell, E., & Abushariah, M. A. M. (2013). SALMA: Standard Arabic Language Morphological Analysis. 2013 1st International Conference on Communications, Signal Processing, and Their Applications (ICCSPA). https://doi.org/10.1109/iccspa.2013.6487311\
-[6] Hjouj, M., Alarabeyyat, A., & Olab, I. (2016). Rule based approach for Arabic part of speech tagging and name entity recognition. International Journal of Advanced Computer Science and Applications, 7(6). https://doi.org/10.14569/ijacsa.2016.070642
+<a id="1">[1]</a> Zerrouki, T., (2023). PyArabic: A Python package for Arabic text. Journal of Open Source Software, 8(84), 4886, https://doi.org/10.21105/joss.04886 \
+<a id="2">[2]</a> Alkhatib, R. M., Zerrouki, T., Shquier, M. M. A., & Balla, A. (2023). Tashaphyne0.4: A new Arabic light stemmer based on rhizome modeling approach. Information Retrieval Journal, 26(14). doi: https://doi.org/10.1007/s10791-023-09429-y \
+<a id="3">[3]</a> T. Zerrouki, Qalsadi, Arabic morphological analyzer Library for python.,  https://pypi.python.org/pypi/qalsadi/ \
+<a id="4">[4]</a> MagedSaeed. (n.d.). GitHub - MagedSaeed/farasapy: A Python implementation of Farasa toolkit. GitHub. https://github.com/MagedSaeed/farasapy?tab=readme-ov-file#want-to-cite \
+<a id="5">[5]</a> Sawalha, M., Atwell, E., & Abushariah, M. A. M. (2013). SALMA: Standard Arabic Language Morphological Analysis. 2013 1st International Conference on Communications, Signal Processing, and Their Applications (ICCSPA). https://doi.org/10.1109/iccspa.2013.6487311 \
+<a id="6">[6]</a> Hjouj, M., Alarabeyyat, A., & Olab, I. (2016). Rule-based approach for Arabic part of speech tagging and name entity recognition. International Journal of Advanced Computer Science and Applications, 7(6). https://doi.org/10.14569/ijacsa.2016.070642
