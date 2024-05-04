@@ -9,7 +9,7 @@ This repository contains the Labs done during the course of Natural Language Pro
 
 To start, clone this branch of the repo onto your local machine:
 ```bash
-git clone -b main --single-branch [https://github.com/Samashi47/NLP_Labs/tree/main/Lab1]
+git clone -b main --single-branch [https://github.com/Samashi47/NLP_Labs]
 ```
 create a virtual environment in the repository by typing the followwing command:
 ```bash
