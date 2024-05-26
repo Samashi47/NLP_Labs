@@ -3,7 +3,7 @@
 **Supervised by :** ***Pr. Lotfi El Aachak***\
 **Course :** ***NLP***\
 This directory will contain everything that concerns Lab 4 of the NLP course.
-You can find the notebook [here](https://github.com/Samashi47/NLP_Labs/blob/main/Lab3/lab4.ipynb).
+You can find the notebook [here](https://github.com/Samashi47/NLP_Labs/blob/main/Lab4/lab4.ipynb).
 ## Part 1: Classification Regression
 ### Scraping
 We used for scraping the BeautifulSoup library for retrieving the articles from [Wikipedia](https://ar.wikipedia.org/). The topic chosen is `الحرب العالمية الاولى`, we took 500 articles on the subject, some of which have no relation to said topic. The link that was scraped first is [Search results](https://ar.wikipedia.org/w/index.php?limit=500&offset=0&profile=default&search=%D8%A7%D9%84%D8%AD%D8%B1%D8%A8+%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85%D9%8A%D8%A9+%D8%A7%D9%84%D8%A3%D9%88%D9%84%D9%89&title=%D8%AE%D8%A7%D8%B5:%D8%A8%D8%AD%D8%AB&ns0=1) for the topic found using the search bar of Wikipedia.\
